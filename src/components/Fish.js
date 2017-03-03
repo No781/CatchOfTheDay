@@ -3,7 +3,8 @@ import { formatPrice } from '../helpers'
 
 class Fish extends React.Component {
     render() {
-        const { details } = this.props;
+        // what is called inside the parenthesis is the same as calling this.props.details
+        const { details, index } = this.props;
         const isAvailable = details.status === 'available';
         const buttonText = isAvailable ? 'Add your Order' : 'Sold Out!'; 
         return (
@@ -14,7 +15,7 @@ class Fish extends React.Component {
                     <span className="price">{formatPrice(details.price)}</span>
                 </h3>
                 <p>{details.desc}</p>
-                <button disabled={!isAvailable}>{buttonText}</button>
+                <button disabled={!isAvailable} onClick={() => this.props.addToOrder(index)}>{buttonText}</button>
             </li>
         )
     }
