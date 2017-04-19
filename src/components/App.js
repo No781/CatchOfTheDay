@@ -15,6 +15,8 @@ class App extends React.Component {
         this.loadSamples = this.loadSamples.bind(this);
         this.addToOrder = this.addToOrder.bind(this)
         this.updateFish = this.updateFish.bind(this)
+        this.removeFish = this.removeFish.bind(this)
+        this.removeFromOrder = this.removeFromOrder.bind(this)
         // define initial state
         this.state = {
             fishes: {},
@@ -63,6 +65,14 @@ class App extends React.Component {
         fishes[key] = updateFish;
         this.setState({ fishes });
     }
+
+    removeFish(key) {
+        const fishes = {...this.state.fishes};
+        // since this app is talking to Firebase null has to be used to remove an item
+        fishes[key] = null;
+        this.setState({fishes});
+    }
+
     loadSamples() {
         this.setState({
             fishes: sampleFishes
@@ -75,6 +85,11 @@ class App extends React.Component {
         order[key] = order[key] +1 || 1;
         this.setState({order});
     }
+    removeFromOrder(key) {
+        const order = {...this.state.order};
+        delete order[key];
+        this.setState({order});
+    }
     render() {
         return (
             <div className="catch-of-the-day">
@@ -84,8 +99,17 @@ class App extends React.Component {
                         {Object.keys(this.state.fishes).map(key => <Fish key={key} index={key} addToOrder={this.addToOrder} details={this.state.fishes[key]}/>)}
                     </ul>
                 </div>
-                <Order params={this.props.params} fishes={this.state.fishes} order={this.state.order} />
-                <Inventory loadSamples={this.loadSamples} addFish={this.addFish} fishes={this.state.fishes} updateFish={this.updateFish}/>
+                <Order 
+                    params={this.props.params} 
+                    fishes={this.state.fishes} 
+                    order={this.state.order} 
+                    removeFromOrder={this.removeFromOrder}/>
+                <Inventory 
+                    loadSamples={this.loadSamples} 
+                    addFish={this.addFish} 
+                    fishes={this.state.fishes} 
+                    updateFish={this.updateFish} 
+                    removeFish={this.removeFish}/>
             </div>
         )
     }
